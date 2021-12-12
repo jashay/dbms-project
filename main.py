@@ -25,6 +25,36 @@ def login():
 	return render_template('adminlogin.html', error=error)
 
 
+@app.route('/userlogin', methods=['GET', 'POST'])
+def userloginpage():
+	error = None
+	if request.method == 'POST':
+		_json = request.form.to_dict(flat=False)
+		print(_json)
+		try:
+			_json = request.form.to_dict(flat=False)
+			_email = _json['username']
+			_password = _json['password']
+			
+			query = "SELECT p_id from smjl_customer where c_email = %s and password=%s"
+			
+			bData = (_email, _password)
+			conn = mysql.connect()
+			cursor = conn.cursor(pymysql.cursors.DictCursor)
+			cursor.execute(query, bData)
+			conn.commit()
+			if cursor.rowcount == 0:
+				error = 'Invalid Credentials. Please try again.'
+			else:
+				return render_template('userdashboard.html')
+		except Exception as e:
+			print(e)
+			error = 'Server error. Please try again.'
+		finally:
+			cursor.close() 
+			conn.close()
+	return render_template('adminlogin.html', error=error)
+
 @app.route('/user')
 def userpage():
 	return render_template('user.html')
@@ -163,50 +193,54 @@ def not_found(error=None):
 
 # USER
 
-@app.route('/addcustomer', methods=['POST'])
+@app.route('/addcustomer', methods=['GET','POST'])
 def add_cust():
-	try:
-		_json = request.json
-		_nationality = _json['nationality']
-		_email = _json['email']
-		_phone = _json['phone']
-		_passengers_alongside = _json['passengers_alongside']	
-		_emergency_fname=_json['emergency_fname']
-		_emergency_lname=_json['emergency_lname']	
-		_emergency_phone=_json['emergency_phone']	
-		_password = _json['password']
-		_fname = _json['fname']
-		_lname = _json['lname']
-		_dob = _json['dob']
-		_gender = _json['gender']
-		_passport_number = _json['passport_number']
-		_passport_expiry = _json['passport_expiry']
+	error = None
+	if request.method == 'POST':
+		try:
+			_json = request.form.to_dict(flat=False)
+			_nationality = _json['nationality']
+			_email = _json['email']
+			_phone = _json['phone']
+			_passengers_alongside = _json['passengers_alongside']	
+			_emergency_fname=_json['emergency_fname']
+			_emergency_lname=_json['emergency_lname']	
+			_emergency_phone=_json['emergency_phone']	
+			_password = _json['password']
+			_fname = _json['fname']
+			_lname = _json['lname']
+			_dob = _json['dob']
+			_gender = _json['gender']
+			_passport_number = _json['passport_number']
+			_passport_expiry = _json['passport_expiry']
 
-		if request.method == 'POST':	
-			p_id = random.randint(1, 10000)		
+			if request.method == 'POST':	
+				p_id = random.randint(1, 10000)		
 
-			sqlQuery1 = "INSERT INTO smjl_passenger VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-			bindData1 = (p_id, _fname, _lname, _dob, _nationality, _gender, _passport_number, _passport_expiry)
-			print(p_id)
-			sqlQuery = "INSERT INTO smjl_customer VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-			bindData = (p_id, _email, _phone, _nationality, _passengers_alongside, _emergency_fname, _emergency_lname, _emergency_phone, _password)
-		
-			conn = mysql.connect()
-			cursor = conn.cursor()
-			cursor.execute(sqlQuery1, bindData1)
-			cursor.execute(sqlQuery, bindData)
-			conn.commit()
+				sqlQuery1 = "INSERT INTO smjl_passenger VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+				bindData1 = (p_id, _fname, _lname, _dob, _nationality, _gender, _passport_number, _passport_expiry)
 
-			respone = jsonify('Customer and Passenger added successfully!')
-			respone.status_code = 200
-			return respone
-		else:
-			return not_found()
-	except Exception as e:
-		print(e)
-	finally:
-		cursor.close() 
-		conn.close()
+				sqlQuery = "INSERT INTO smjl_customer VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+				bindData = (p_id, _email, _phone, _nationality, _passengers_alongside, _emergency_fname, _emergency_lname, _emergency_phone, _password)
+			
+				conn = mysql.connect()
+				cursor = conn.cursor()
+				cursor.execute(sqlQuery1, bindData1)
+				cursor.execute(sqlQuery, bindData)
+				conn.commit()
+
+				respone = jsonify('Customer and Passenger added successfully!')
+				respone.status_code = 200
+				return respone
+			else:
+				return not_found()
+		except Exception as e:
+			print(e)
+		finally:
+			cursor.close() 
+			conn.close()
+	else:
+		return render_template('signup.html', error=error)
 
 
 @app.route('/bookings/<id>') 

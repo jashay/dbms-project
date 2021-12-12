@@ -1,19 +1,93 @@
 <div class="container">
   <div class="form form--signup">
     <div class="form--heading">Welcome! Sign Up</div>
-    <form autocomplete="off">
-      <input type="text" placeholder="First Name">
-      <input type="text" placeholder="Last Name">
-      <input type="text" placeholder="Date of Birth (YYYY-MM-DD)">
-      <input type="text" placeholder="Passpost Number">
-      <input type="text" placeholder="Passport Expiry (YYYY-MM-DD)">
-      <input type="email" placeholder="Email">
-      <input type="password" placeholder="Password">
-      <input type="text" placeholder="Number of Passengers">
-      <input type="text" placeholder="Emergency Contact First Name">
-      <input type="text" placeholder="Emergency Contact Last Name">
-      <input type="text" placeholder="Emergency Contact Contact">
+    <form autocomplete="off" method="post">
+      <input type="text" placeholder="First Name" name="fname">
+      <input type="text" placeholder="Last Name" name="lname">
+      <input type="text" placeholder="Gender (M/F/O)" name="gender">
+      <input type="text" placeholder="Nationality" name="nationality">
+      <input type="text" placeholder="Date of Birth (YYYY-MM-DD)" name="dob">
+      <input type="text" placeholder="Passpost Number" name="passport_number">
+      <input type="text" placeholder="Passport Expiry (YYYY-MM-DD)" name="passport_expiry">
+      <input type="text" placeholder="Email" name="email">
+      <input type="text" placeholder="Phone Number" name="phone">
+      <input type="password" placeholder="Password" name="password">
+      <input type="text" placeholder="Number of Passengers" name="passengers_alongside">
+      <input type="text" placeholder="Emergency Contact First Name" name="emergency_fname">
+      <input type="text" placeholder="Emergency Contact Last Name" name="emergency_lname">
+      <input type="text" placeholder="Emergency Contact Contact" name="emergency_phone">
+
       <button class="button">Sign Up</button>
     </form>
+    {% if error %}
+      <p class="error"><strong>Error:</strong> {{ error }}
+    {% endif %}
   </div>
 </div>
+
+<style>
+  
+  body {background-color: powderblue;}
+  form {
+  border: 3px solid #f1f1f1;
+  }
+
+  h1 {
+  text-align: center;
+  }
+/* Full-width inputs */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #4507b8;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra style for the cancel button (red) */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the avatar image inside this container */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+/* Avatar image */
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+}
+
+/* The "Forgot password" text */
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+</style>

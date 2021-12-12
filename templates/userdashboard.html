@@ -1,9 +1,8 @@
 <html>
 
-  <h1>Welcome!!</h1>
+  <h1>User Dashboard</h1>
 
-  <button id="signup">Signup</button>
-  <button id="login">Login</button>
+  <button id="bookings">My Bookings</button>
 
 </html>
 
@@ -13,10 +12,10 @@
   form {
   border: 3px solid #f1f1f1;
   }
-
   h1 {
   text-align: center;
   }
+
 /* Full-width inputs */
 input[type=text], input[type=password] {
   width: 100%;
@@ -75,11 +74,7 @@ span.psw {
 </style>
 
 <script>
-  document.getElementById("signup").onclick = function () {
-  location.href = "http://localhost:5000/addcustomer";
+  document.getElementById("bookings").onclick = function () {
+    location.href = "http://localhost:5000/bookings";
   };
-  document.getElementById("login").onclick = function () {
-    location.href = "http://localhost:5000/userlogin";
-  };
-
 </script>

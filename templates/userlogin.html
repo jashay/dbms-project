@@ -1,10 +1,21 @@
 <html>
-
-  <h1>Welcome!!</h1>
-
-  <button id="signup">Signup</button>
-  <button id="login">Login</button>
-
+  <head>
+    <title>User Login</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Please login</h1>
+      <br>
+      <form autocomplete="off" method="post">
+        <input type="text" placeholder="Email" name="email">
+        <input type="password" placeholder="Password" name="password">
+        <input class="btn btn-default" type="submit" value="Login">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+  </body>
 </html>
 
 <style>
@@ -13,10 +24,10 @@
   form {
   border: 3px solid #f1f1f1;
   }
-
   h1 {
   text-align: center;
   }
+
 /* Full-width inputs */
 input[type=text], input[type=password] {
   width: 100%;
@@ -74,12 +85,3 @@ span.psw {
 }
 </style>
 
-<script>
-  document.getElementById("signup").onclick = function () {
-  location.href = "http://localhost:5000/addcustomer";
-  };
-  document.getElementById("login").onclick = function () {
-    location.href = "http://localhost:5000/userlogin";
-  };
-
-</script>
