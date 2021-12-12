@@ -2,7 +2,7 @@ import pymysql
 from app import app
 from config import mysql
 from flask import jsonify
-from flask import flash, request, render_template
+from flask import flash, request, render_template, redirect, url_for
 import random
 
 
@@ -13,6 +13,17 @@ def home():
 @app.route('/admin')
 def adminpage():
 	return render_template('admin.html')
+
+@app.route('/adminlogin', methods=['GET', 'POST'])
+def login():
+	error = None
+	if request.method == 'POST':
+		if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+				error = 'Invalid Credentials. Please try again.'
+		else:
+				return redirect(url_for('adminpage'))
+	return render_template('adminlogin.html', error=error)
+
 
 @app.route('/user')
 def userpage():
