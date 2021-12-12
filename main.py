@@ -42,11 +42,13 @@ def userloginpage():
 			conn = mysql.connect()
 			cursor = conn.cursor(pymysql.cursors.DictCursor)
 			cursor.execute(query, bData)
+			rows = cursor.fetchall()
 			conn.commit()
+			
 			if cursor.rowcount == 0:
 				error = 'Invalid Credentials. Please try again.'
 			else:
-				return render_template('userdashboard.html')
+				return render_template('userdashboard.html', id = rows[0]['p_id'])
 		except Exception as e:
 			print(e)
 			error = 'Server error. Please try again.'

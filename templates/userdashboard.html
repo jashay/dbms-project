@@ -1,7 +1,6 @@
 <html>
 
   <h1>User Dashboard</h1>
-
   <button id="bookings">My Bookings</button>
 
 </html>
@@ -75,6 +74,6 @@ span.psw {
 
 <script>
   document.getElementById("bookings").onclick = function () {
-    location.href = "http://localhost:5000/bookings";
+      location.href = "http://localhost:5000/bookings/{{id}}";
   };
 </script>
