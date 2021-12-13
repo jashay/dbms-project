@@ -264,5 +264,24 @@ def get_bookings(id):
 		cursor.close() 
 		conn.close()
 
+@app.route('/insuranceplans/<id>') 
+def get_insurance_plans(id):
+	try:
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+		query = "select ip_id, ip_name from smjl_insurance_plans, smjl_ip_p, smjl_passenger where ip_id=smjl_insurance_plans_ip_id and smjl_passenger_p_id=p_id and p_id=%s"
+		bData = (id)
+		cursor.execute(query, bData)
+		rows = cursor.fetchall()
+		respone = jsonify(rows)
+		respone.status_code = 200
+		return respone
+	except Exception as e:
+		print(e)
+		return None
+	finally:
+		cursor.close() 
+		conn.close()
+
 if __name__ == "__main__":
     app.run()

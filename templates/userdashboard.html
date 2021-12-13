@@ -2,7 +2,7 @@
 
   <h1>User Dashboard</h1>
   <button id="bookings">My Bookings</button>
-
+  <button id="insuranceplans">My Insurance Plans</button>
 </html>
 
 <style>
@@ -75,5 +75,8 @@ span.psw {
 <script>
   document.getElementById("bookings").onclick = function () {
       location.href = "http://localhost:5000/bookings/{{id}}";
+  };
+  document.getElementById("insuranceplans").onclick = function () {
+      location.href = "http://localhost:5000/insuranceplans/{{id}}";
   };
 </script>
