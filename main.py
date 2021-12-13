@@ -1,8 +1,9 @@
+from flask.wrappers import Response
 import pymysql
 from app import app
 from config import mysql
 from flask import jsonify
-from flask import flash, request, render_template, redirect, url_for
+from flask import flash, request, render_template, redirect, url_for, render_template_string
 import random
 
 
@@ -269,11 +270,12 @@ def get_insurance_plans(id):
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		query = "select ip_id, ip_name from smjl_insurance_plans, smjl_ip_p, smjl_passenger where ip_id=smjl_insurance_plans_ip_id and smjl_passenger_p_id=p_id and p_id=%s"
+		query = "select ip_id as InsuranceID, ip_name as InsuranceName from smjl_insurance_plans, smjl_ip_p, smjl_passenger where ip_id=smjl_insurance_plans_ip_id and smjl_passenger_p_id=p_id and p_id=%s"
 		bData = (id)
 		cursor.execute(query, bData)
 		rows = cursor.fetchall()
 		respone = jsonify(rows)
+		print(rows)
 		respone.status_code = 200
 		return respone
 	except Exception as e:
@@ -283,5 +285,28 @@ def get_insurance_plans(id):
 		cursor.close() 
 		conn.close()
 
+@app.route('/flights/<id>')
+def get_flights(id):
+	try:
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+		query = "select b_id as BookingID, f_id as FlightID, f_arrival_airport, f_departure_airport from smjl_flight, smjl_b_f, smjl_booking, smjl_passenger where smjl_flight_f_id=f_id and smjl_booking_b_id=b_id and smjl_customer_p_id=smjl_booking_p_id and smjl_customer_p_id=p_id and p_id=%s"
+		bData = (id)
+		cursor.execute(query, bData)
+		rows = cursor.fetchall()
+		respone = jsonify(rows)
+		print(rows)
+		respone.status_code = 200
+		return respone
+	except Exception as e:
+		print(e)
+		return None
+	finally:
+		cursor.close() 
+		conn.close()
+
+
 if __name__ == "__main__":
     app.run()
+
+

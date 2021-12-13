@@ -3,6 +3,7 @@
   <h1>User Dashboard</h1>
   <button id="bookings">My Bookings</button>
   <button id="insuranceplans">My Insurance Plans</button>
+  <button id="flights">My Flights</button>
 </html>
 
 <style>
@@ -78,5 +79,8 @@ span.psw {
   };
   document.getElementById("insuranceplans").onclick = function () {
       location.href = "http://localhost:5000/insuranceplans/{{id}}";
+  };
+  document.getElementById("flights").onclick = function () {
+      location.href = "http://localhost:5000/flights/{{id}}";
   };
 </script>
