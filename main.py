@@ -2,8 +2,7 @@ from flask.wrappers import Response
 import pymysql
 from app import app
 from config import mysql
-from flask import jsonify
-from flask import flash, request, render_template, redirect, url_for, render_template_string
+from flask import flash, request, render_template, redirect, url_for
 import string
 import random
 
