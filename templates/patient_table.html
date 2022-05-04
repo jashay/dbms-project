@@ -1,0 +1,39 @@
+{% extends "base_table.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Race</th>
+        <th>Gender</th>
+        <th>Blood Group</th>
+        <th>Insurance Name</th>
+        <th>Phone Number</th>
+        <th>Birth Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pat in patients %}
+        <tr>
+          <td>{{ pat['name']}}</td>
+          <td>{{ pat['race'] }}</td>
+          <td>{{ pat['gender'] }}</td>
+          <td>{{ pat['blood_group'] }}</td>
+          <td>{{ pat['insurance_name'] }}</td>
+          <td>{{ pat['phone_number'] }}</td>
+          <td>{{ pat['birthdate'] }}</td>
+          <td><form id="edit" action="{{url_for('get_all_patients', action='edit', patient_id=pat['patient_id'])}}" method="POST">
+            <button class="btn btn-primary">Edit</button>
+          </form></td>
+          <td><form id="delete" action="{{url_for('get_all_patients', action='delete', patient_id=pat['patient_id'])}}" method="POST">
+            <button class="btn btn-primary">Delete</button>
+          </form></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <form id="add" action="{{url_for('get_all_patients', action='add', patient_id='1234')}}" method="POST">
+    <button class="btn btn-primary">Add Patient</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,84 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<div class="container">
+  <div class="form form--signup">
+    <div style="padding: 20px;" class="display-1 form--heading">Add New Patient</div>
+    <form autocomplete="off" method="post">
+      <div class "form-group">
+        <label for="name">Name</label>
+        <input type="text" id = "name" placeholder="Name" name="name">
+      </div>
+      <div class "form-group">
+        <label for="house_number">House Number</label>
+        <input type="text" id="house_number" placeholder="House Number" name="house_number">
+      </div>
+      <div class="form-group">
+        <label for="street">Street</label>
+        <input type="text" id="street" placeholder="Street" name="street">
+      </div>
+      <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" id = "city" placeholder="City" name="city">
+      </div>
+      <div class="form-group">
+        <label for="zipcode">Zipcode</label>
+        <input type="text" id = "zipcode" placeholder="Zipcode" name="zipcode">
+      </div>
+      <div class "form-group">
+        <label for="birthdate">Birth Date</label>
+        <input type="datetime-local" id = "birthdate" placeholder="Birth Date" name="birthdate" min="1900-01-01T00:00" max="2022-01-14T00:00">
+      </div>
+      <div class "form-group">
+        <label for="race">Race</label>
+        <input type="text" id="race" placeholder="Race" name="race">
+      </div>
+      <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <input type="text" id="phone_number" placeholder="Phone Number" name="phone_number">
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <input type="text" id = "gender" placeholder="Gender" name="gender">
+      </div>
+      <div class="form-group">
+        <label for="marital_status">Marital Status</label>
+        <input type="text" id = "marital_status" placeholder="Marital Status" name="marital_status">
+      </div>
+      <div class "form-group">
+        <label for="blood_group">Blood Group</label>
+        <input type="text" id = "blood_group" placeholder="Blood Group" name="blood_group">
+      </div>
+      <div class "form-group">
+        <label for="insurance_name">Insurance Name</label>
+        <input type="text" id="insurance_name" placeholder="Insurance Name" name="insurance_name">
+      </div>
+      <div class="form-group">
+        <label for="insurance_number">Insurance Number</label>
+        <input type="text" id="insurance_number" placeholder="Insurance Number" name="insurance_number">
+      </div>
+      
+      <button class="btn btn-primary">Add</button>
+    </form>
+    {% if error %}
+      <p class="error"><strong>Error:</strong> {{ error }}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  
+  body {background-color: #63a4ff;
+background-image: linear-gradient(315deg, #63a4ff 0%, #83eaf1 74%);}
+
+  h1 {
+  text-align: center;
+  }
+  /* Full-width inputs */
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+</style>

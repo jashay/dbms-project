@@ -4,6 +4,7 @@ from app import app
 from config import mysql
 from flask import jsonify
 from flask import flash, request, render_template, redirect, url_for, render_template_string
+import string
 import random
 
 
@@ -25,239 +26,112 @@ def login():
 				return redirect(url_for('adminpage'))
 	return render_template('adminlogin.html', error=error)
 
-
-@app.route('/userlogin', methods=['GET', 'POST'])
-def userloginpage():
-	error = None
-	if request.method == 'POST':
-		_json = request.form.to_dict(flat=False)
-		print(_json)
-		try:
+@app.route('/add-patient', methods=['GET', 'POST'])
+def add_patient():
+	try:
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+		if request.method == "POST":
 			_json = request.form.to_dict(flat=False)
-			_email = _json['username']
-			_password = _json['password']
+			name = _json['name']
+			house_number = _json['house_number']
+			street = _json['street']
+			city = _json['city']
+			zipcode = _json['zipcode']
+			birthdate = _json['birthdate']
+			phone_number = _json['phone_number']
+			race = _json['race']
+			gender = _json['gender']
+			marital_status = _json['marital_status']
+			blood_group = _json['blood_group']
+			insurance_name = _json['insurance_name']
+			insurance_number = _json['insurance_number']
+			patient_id = [randStr()]
+
+			query = "INSERT INTO patient(patient_id,name,house_number,street,city,zipcode,birthdate,phone_number,race,gender,marital_status,blood_group,insurance_name,insurance_number,TBL_LAST_DATE)VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,null)"
+			b_data = (patient_id, name, house_number, street, city, zipcode, birthdate, phone_number, race, gender, marital_status, blood_group, insurance_name, insurance_number)
 			
-			query = "SELECT p_id from smjl_customer where c_email = %s and password=%s"
+			cursor.execute(query, b_data)
+			conn.commit()
+
+			return redirect(url_for('get_all_patients'))
 			
-			bData = (_email, _password)
+		elif request.method == "GET":
+			return render_template('add_patient.html')
+
+	except Exception as e:
+		print(e)
+		return None
+	finally:
+		cursor.close() 
+		conn.close()
+
+@app.route('/edit-patient', methods=['GET', 'POST'])
+@app.route('/edit-patient/<patient_id>', methods=['GET', 'POST'])
+def edit_patient(patient_id):
+		try:
 			conn = mysql.connect()
 			cursor = conn.cursor(pymysql.cursors.DictCursor)
-			cursor.execute(query, bData)
-			rows = cursor.fetchall()
-			conn.commit()
-			
-			if cursor.rowcount == 0:
-				error = 'Invalid Credentials. Please try again.'
-			else:
-				return render_template('userdashboard.html', id = rows[0]['p_id'])
-		except Exception as e:
-			print(e)
-			error = 'Server error. Please try again.'
-		finally:
-			cursor.close() 
-			conn.close()
-	return render_template('adminlogin.html', error=error)
+			if request.method == "POST":
+				_json = request.form.to_dict(flat=False)
+				name = _json['name']
+				house_number = _json['house_number']
+				street = _json['street']
+				city = _json['city']
+				zipcode = _json['zipcode']
+				birthdate = _json['birthdate']
+				phone_number = _json['phone_number']
+				race = _json['race']
+				gender = _json['gender']
+				marital_status = _json['marital_status']
+				blood_group = _json['blood_group']
+				insurance_name = _json['insurance_name']
+				insurance_number = _json['insurance_number']
 
-@app.route('/user')
-def userpage():
-	return render_template('user.html')
-
-# ADMIN
-
-@app.route('/customers')
-def get_all_customers():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * from smjl_customer")
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
-	except Exception as e:
-		print(e)
-		return None
-	finally:
-		cursor.close() 
-		conn.close()
-
-@app.route('/airlines')
-def getairlines():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * from smjl_airlines")
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
-	except Exception as e:
-		print(e)
-		return None
-	finally:
-		cursor.close() 
-		conn.close()
-
-@app.route('/passengers')
-def get_all_passengers():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * from smjl_passenger")
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
-	except Exception as e:
-		print(e)
-		return None
-	finally:
-		cursor.close() 
-		conn.close()
-
-@app.route('/flights')
-def get_all_flights():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * from smjl_flight")
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
-	except Exception as e:
-		print(e)
-		return None
-	finally:
-		cursor.close() 
-		conn.close()
-
-@app.route('/toptwocustomers') 
-def get_top_two_customers():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT p_id, count(smjl_customer_p_id) as numberOfBookings from smjl_customer, smjl_booking where p_id = smjl_customer_p_id group by p_id order by numberOfBookings desc limit 2")
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
-	except Exception as e:
-		print(e)
-		return None
-	finally:
-		cursor.close() 
-		conn.close()
-
-@app.route('/toptwoairlines') 
-def get_top_two_airlines():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT al_name, count(f_id) from smjl_airlines, smjl_flight where al_id=smjl_airlines_al_id group by al_name order by count(f_id) desc limit 2;")
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
-	except Exception as e:
-		print(e)
-		return None
-	finally:
-		cursor.close() 
-		conn.close()
-
-@app.route('/toptwomemberships') 
-def get_top_two_memberships():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT m_id, m_name, count(p_id) from smjl_club_memberships group by m_id order by count(p_id) desc limit 2;")
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
-	except Exception as e:
-		print(e)
-		return None
-	finally:
-		cursor.close() 
-		conn.close()
-		
-
-@app.errorhandler(404)
-def not_found(error=None):
-    message = {
-        'status': 404,
-        'message': 'Record not found: ' + request.url,
-    }
-    respone = jsonify(message)
-    respone.status_code = 404
-    return respone
-
-# USER
-
-@app.route('/addcustomer', methods=['GET','POST'])
-def add_cust():
-	error = None
-	if request.method == 'POST':
-		try:
-			_json = request.form.to_dict(flat=False)
-			_nationality = _json['nationality']
-			_email = _json['email']
-			_phone = _json['phone']
-			_passengers_alongside = _json['passengers_alongside']	
-			_emergency_fname=_json['emergency_fname']
-			_emergency_lname=_json['emergency_lname']	
-			_emergency_phone=_json['emergency_phone']	
-			_password = _json['password']
-			_fname = _json['fname']
-			_lname = _json['lname']
-			_dob = _json['dob']
-			_gender = _json['gender']
-			_passport_number = _json['passport_number']
-			_passport_expiry = _json['passport_expiry']
-
-			if request.method == 'POST':	
-				p_id = random.randint(1, 10000)		
-
-				sqlQuery1 = "INSERT INTO smjl_passenger VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-				bindData1 = (p_id, _fname, _lname, _dob, _nationality, _gender, _passport_number, _passport_expiry)
-
-				sqlQuery = "INSERT INTO smjl_customer VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-				bindData = (p_id, _email, _phone, _nationality, _passengers_alongside, _emergency_fname, _emergency_lname, _emergency_phone, _password)
-			
-				conn = mysql.connect()
-				cursor = conn.cursor()
-				cursor.execute(sqlQuery1, bindData1)
-				cursor.execute(sqlQuery, bindData)
+				print("hqsw")
+				query = "UPDATE patient set name=%s,house_number=%s,street=%s,city=%s,zipcode=%s,birthdate=%s,phone_number=%s,race=%s,gender=%s,marital_status=%s,blood_group=%s,insurance_name=%s,insurance_number=%s where patient_id=%s"
+				b_data = (name, house_number, street, city, zipcode, birthdate, phone_number, race, gender, marital_status, blood_group, insurance_name, insurance_number, patient_id)
+				
+				cursor.execute(query, b_data)
 				conn.commit()
 
-				respone = jsonify('Customer and Passenger added successfully!')
-				respone.status_code = 200
-				return respone
-			else:
-				return not_found()
+				return redirect(url_for('get_all_patients'))
+			elif request.method == "GET":
+				query ="SELECT * from patient where patient_id = %s"
+				b_data = (patient_id)
+				cursor.execute(query, b_data)
+				rows = cursor.fetchall()
+				return render_template('edit_patient.html', patient=rows)
 		except Exception as e:
 			print(e)
+			return None
 		finally:
 			cursor.close() 
 			conn.close()
-	else:
-		return render_template('signup.html', error=error)
 
-
-@app.route('/bookings/<id>') 
-def get_bookings(id):
+@app.route('/patients', methods=['GET', 'POST'])
+@app.route('/patients/<action>/<patient_id>', methods=['GET', 'POST'])
+def get_all_patients(action=None,patient_id=None):
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		query = "SELECT * from smjl_booking where smjl_customer_p_id = %s"
-		bData = (id)
-		cursor.execute(query, bData)
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		respone.status_code = 200
-		return respone
+
+		if request.method == "POST":
+			if action == 'delete':
+				query = "DELETE from patient where patient_id = %s"
+				b_data = (patient_id)
+				cursor.execute(query,b_data)
+				conn.commit()
+				return redirect(url_for('get_all_patients'))
+			elif action == 'edit':
+				return redirect(url_for('edit_patient',patient_id=patient_id))
+			elif action == 'add':
+				return redirect(url_for('add_patient'))
+		elif request.method == "GET":
+			query ="SELECT * from patient"
+			cursor.execute(query)
+			rows = cursor.fetchall()
+			return render_template('patient_table.html', title='Patients', patients=rows)
 	except Exception as e:
 		print(e)
 		return None
@@ -265,19 +139,35 @@ def get_bookings(id):
 		cursor.close() 
 		conn.close()
 
-@app.route('/insuranceplans/<id>') 
-def get_insurance_plans(id):
+def randStr(chars = string.ascii_uppercase + string.digits, N=10):
+	return ''.join(random.choice(chars) for _ in range(N))
+
+@app.route('/add-doctor', methods=['GET', 'POST'])
+def add_doctor():
+	print("add")
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		query = "select ip_id as InsuranceID, ip_name as InsuranceName from smjl_insurance_plans, smjl_ip_p, smjl_passenger where ip_id=smjl_insurance_plans_ip_id and smjl_passenger_p_id=p_id and p_id=%s"
-		bData = (id)
-		cursor.execute(query, bData)
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		print(rows)
-		respone.status_code = 200
-		return respone
+		if request.method == "POST":
+			_json = request.form.to_dict(flat=False)
+			name = _json['name']
+			dtype = _json['type']
+			speciality = _json['speciality']
+			ophone = _json['ophone']
+			pphone = _json['pphone']
+			doc_id = [randStr()]
+
+			query = "INSERT INTO doctor(doc_id,type,name,speciality,offic_phone,personal_phone,TBL_LAST_DATE) VALUES (%s,%s,%s,%s,%s,%s,null)"
+			b_data = (doc_id, dtype, name, speciality, ophone, pphone)
+			
+			cursor.execute(query, b_data)
+			conn.commit()
+
+			return redirect(url_for('get_all_doctors'))
+			
+		elif request.method == "GET":
+			return render_template('add_doctor.html')
+
 	except Exception as e:
 		print(e)
 		return None
@@ -285,19 +175,36 @@ def get_insurance_plans(id):
 		cursor.close() 
 		conn.close()
 
-@app.route('/flights/<id>')
-def get_flights(id):
+
+@app.route('/edit-doctor', methods=['GET', 'POST'])
+@app.route('/edit-doctor/<doc_id>', methods=['GET', 'POST'])
+def edit_doctor(doc_id):
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		query = "select b_id as BookingID, f_id as FlightID, f_arrival_airport, f_departure_airport from smjl_flight, smjl_b_f, smjl_booking, smjl_passenger where smjl_flight_f_id=f_id and smjl_booking_b_id=b_id and smjl_customer_p_id=smjl_booking_p_id and smjl_customer_p_id=p_id and p_id=%s"
-		bData = (id)
-		cursor.execute(query, bData)
-		rows = cursor.fetchall()
-		respone = jsonify(rows)
-		print(rows)
-		respone.status_code = 200
-		return respone
+		if request.method == "POST":
+			_json = request.form.to_dict(flat=False)
+			name = _json['name']
+			dtype = _json['type']
+			speciality = _json['speciality']
+			ophone = _json['ophone']
+			pphone = _json['pphone']
+
+			query = "UPDATE doctor set name = %s,type= %s,speciality=%s,offic_phone=%s,personal_phone=%s where doc_id = %s"
+			b_data = (name, dtype, speciality, ophone, pphone, doc_id)
+			
+			cursor.execute(query, b_data)
+			conn.commit()
+
+			return redirect(url_for('get_all_doctors'))
+			
+		elif request.method == "GET":
+			query ="SELECT * from doctor where doc_id = %s"
+			b_data = (doc_id)
+			cursor.execute(query, b_data)
+			rows = cursor.fetchall()
+			return render_template('edit_doctor.html', doctor=rows)
+
 	except Exception as e:
 		print(e)
 		return None
@@ -305,6 +212,81 @@ def get_flights(id):
 		cursor.close() 
 		conn.close()
 
+@app.route('/doctors', methods=['GET', 'POST'])
+@app.route('/doctors/<action>/<doc_id>', methods=['GET', 'POST'])
+def get_all_doctors(action=None, doc_id=None):
+
+	try:
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+		if request.method == "POST":
+			if action == 'delete':
+				query = "DELETE from doctor where doc_id = %s"
+				b_data = (doc_id)
+				cursor.execute(query,b_data)
+				conn.commit()
+				return redirect(url_for('get_all_doctors'))
+			elif action == 'edit':
+				return redirect(url_for('edit_doctor',doc_id=doc_id))
+			elif action == 'add':
+				return redirect(url_for('add_doctor'))
+
+		elif request.method == "GET":
+			cursor.execute("SELECT * from doctor")
+			rows = cursor.fetchall()
+			return render_template('doctor_table.html', title='Doctors', doctors=rows)
+	except Exception as e:
+		print(e)
+		return None
+	finally:
+		cursor.close() 
+		conn.close()
+
+@app.route('/most-common-disease') 
+def get_most_common_dis():
+	try:
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+		cursor.execute("SELECT * from disease, registration where disease.ICD = registration.ICD group by disease.desc order by count(disease.ICD) desc limit 1;")
+		rows = cursor.fetchall()
+		return render_template('most_common_dis.html', title='Most Common Disease', diseases=rows)
+	except Exception as e:
+		print(e)
+		return None
+	finally:
+		cursor.close() 
+		conn.close()
+
+@app.route('/most-popular-doctor') 
+def get_most_pop_doc():
+	try:
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+		cursor.execute("SELECT * from doctor, doctor_registration where doctor.doc_id = doctor_registration.doc_id group by name order by count(doctor.doc_id) desc limit 1;")
+		rows = cursor.fetchall()
+		return render_template('most_pop_doc.html', title='Most Popular Doctor', doctors=rows)
+	except Exception as e:
+		print(e)
+		return None
+	finally:
+		cursor.close() 
+		conn.close()
+
+@app.route('/most-popular-hospital') 
+def get_most_pop_hos():
+	try:
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+		cursor.execute("SELECT * from hospital, doctor_hospital where hospital.hospital_id = doctor_hospital.hospital_id group by name order by count(hospital.hospital_id) desc limit 1;")
+		rows = cursor.fetchall()
+		return render_template('most_pop_hos.html', title='Most Popular Hospital', hospitals=rows)
+	except Exception as e:
+		print(e)
+		return None
+	finally:
+		cursor.close() 
+		conn.close()
 
 if __name__ == "__main__":
     app.run()

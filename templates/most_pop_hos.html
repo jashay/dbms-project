@@ -1,0 +1,28 @@
+{% extends "base_table.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>City</th>
+        <th>Speciality</th>
+        <th>Hotline Number</th>
+        <th>Inquiry Number</th>
+        <th>Admin Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for hos in hospitals %}
+        <tr>
+          <td>{{ hos['name']}}</td>
+          <td>{{ hos['city'] }}</td>
+          <td>{{ hos['speciality'] }}</td>
+          <td>{{ hos['hotline_number'] }}</td>
+          <td>{{ hos['inquiry_number'] }}</td>
+          <td>{{ hos['admin_number'] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

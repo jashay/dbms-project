@@ -1,0 +1,35 @@
+{% extends "base_table.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Speciality</th>
+        <th>Office Phone Number</th>
+        <th>Personal Phone Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in doctors %}
+        <tr>
+          <td>{{ doc['name']}}</td>
+          <td>{{ doc['type'] }}</td>
+          <td>{{ doc['speciality'] }}</td>
+          <td>{{ doc['offic_phone'] }}</td>
+          <td>{{ doc['personal_phone'] }}</td>
+          <td><form id="edit" action="{{url_for('get_all_doctors', action='edit', doc_id=doc['doc_id'])}}" method="POST">
+            <button class="btn btn-primary">Edit</button>
+          </form></td>
+          <td><form id="delete" action="{{url_for('get_all_doctors', action='delete', doc_id=doc['doc_id'])}}" method="POST">
+            <button class="btn btn-primary">Delete</button>
+          </form></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <form id="add" action="{{url_for('get_all_doctors', action='add', doc_id='1234')}}" method="POST">
+    <button class="btn btn-primary">Add Doctor</button>
+  </form>
+{% endblock %}

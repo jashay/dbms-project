@@ -3,19 +3,16 @@
   <h1 class="display-1">Admin Dashboard</h1>
 
   <div class="container">
-    <button class="btn btn-primary" type="button" id="passengers">All Passengers</button>
+  <button class="btn btn-primary" type="button" id="patients">Patients</button>
 
-  <button class="btn btn-primary" type="button" id="customers">All Customers</button>
+  <button class="btn btn-primary" type="button" id="doctors">Doctors</button>
 
-  <button class="btn btn-primary" type="button" id="airlines">All Airlines</button>
+  <button class="btn btn-primary" type="button" id="most-popular-doctor">Most Popular Doctor</button>
 
-  <button class="btn btn-primary" type="button" id="flights">All Flights</button>
+  <button class="btn btn-primary" type="button" id="most-common-disease">Most Common Disease</button>
 
-  <button class="btn btn-primary" type="button" id="toptwoairlines">Top Two Airlines</button>
+  <button class="btn btn-primary" type="button" id="most-popular-hospital">Most Popular Hospital</button>
 
-  <button class="btn btn-primary" type="button" id="toptwocustomers">Top Two Customers</button>
-
-  <button class="btn btn-primary" type="button" id="toptwomemberships">Top Two Clubs</button>
   </div>
 
 </html>
@@ -89,26 +86,19 @@ span.psw {
 </style>
 
 <script>
-  document.getElementById("passengers").onclick = function () {
-  location.href = "http://localhost:5000/passengers";
+  document.getElementById("doctors").onclick = function () {
+    location.href = "http://localhost:5000/doctors";
   };
-  document.getElementById("customers").onclick = function () {
-    location.href = "http://localhost:5000/customers";
+  document.getElementById("patients").onclick = function () {
+    location.href = "http://localhost:5000/patients";
   };
-  document.getElementById("toptwoairlines").onclick = function () {
-  location.href = "http://localhost:5000/toptwoairlines";
+  document.getElementById("most-popular-doctor").onclick = function () {
+  location.href = "http://localhost:5000/most-popular-doctor";
   };
-  document.getElementById("toptwocustomers").onclick = function () {
-    location.href = "http://localhost:5000/toptwocustomers";
+  document.getElementById("most-common-disease").onclick = function () {
+    location.href = "http://localhost:5000/most-common-disease";
   };
-  document.getElementById("toptwomemberships").onclick = function () {
-    location.href = "http://localhost:5000/toptwomemberships";
-  };
-
-  document.getElementById("airlines").onclick = function () {
-    location.href = "http://localhost:5000/airlines";
-  };
-  document.getElementById("flights").onclick = function () {
-    location.href = "http://localhost:5000/flights";
+  document.getElementById("most-popular-hospital").onclick = function () {
+    location.href = "http://localhost:5000/most-popular-hospital";
   };
 </script>
