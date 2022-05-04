@@ -1,8 +1,7 @@
-from flask.wrappers import Response
 import pymysql
 from app import app
 from config import mysql
-from flask import flash, request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for
 import string
 import random
 
